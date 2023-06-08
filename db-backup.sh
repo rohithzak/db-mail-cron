@@ -4,11 +4,11 @@
 filename=dumpfile.$(date +"%m-%d-%Y").sql
 
 #Taking the backup of DB
-pg_dump -U postgres -d db_name > /backup/$filename 
+pg_dump -U user -d db_name > /backup/$filename 
 	if [ $? -eq 0 ]; then
-         /usr/local/bin/aws --profile s3backup s3 cp /backup/$filename s3://cri-backups/db-backups/ 
+         /usr/local/bin/aws  s3 cp /backup/$filename s3://bucket-name/folder 
         else
-		/usr/bin/python3 mail.py <sender mail ID> FAILED "SQL dump unsuccessful for hotcri"  # FAILED and sql sump unsuccessful are my parmaeter of choice, you can modify as per your requirement
+		/usr/bin/python3 mail.py <sender mail ID> FAILED "SQL dump unsuccessful"  # FAILED and sql sump unsuccessful are my parmaeter of choice, you can modify as per your requirement
 		exit 1
         fi                                                             #Checks if the backup-process is completed successfully and sends mail in failure and push to s3 in success
 
